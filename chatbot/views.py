@@ -22,7 +22,33 @@ def index(request):
 	# pdf.closed
 	# add('1', image)
 	# quick_response('1')
+	greeting()
 	return HttpResponse('ok')
+
+def greeting():
+	post_fb_url = 'https://graph.facebook.com/v2.6/me/thread_settings?access_token=%s'%(PAGE_ACCESS_TOKEN)
+	response_msg = {
+			  "setting_type":"greeting",
+			  "greeting":{
+			    "text":"Hi! Welcome to this bot."
+			  }
+			}
+	response_msg = json.dumps(response_msg)
+	status = requests.post(post_fb_url,headers={"Content-Type": "application/json"},data=response_msg)
+	logg(status.json(),'GR-1')
+
+	response_obj = {
+			  "setting_type":"call_to_actions",
+			  "thread_state":"new_thread",
+			  "call_to_actions":[
+			    {
+			      "payload":"Get Started"
+			    }
+			  ]
+			}
+	response_obj = json.dumps(response_obj)
+	status = requests.post(post_fb_url,headers={"Content-Type": "application/json"},data=response_obj)
+	logg(status.json(),'GR-2')
 
 def logg(text,symbol='*'):
 	return symbol*10 + text + symbol*10
