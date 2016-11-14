@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views import generic
 from django.views.decorators.csrf import csrf_exempt
@@ -11,8 +11,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 VERIFY_TOKEN = '13thnov2016'
 PAGE_ACCESS_TOKEN='EAADKnMFiOeABAMeUxrHrzp8X9lLxLa93BErKfI3oZBdDyvKZCXmBawIZALjL2en73JDFAbipf9EqAMGObAB4TKZAbvslp4ujRhaJqRntTl3IRZB0NG6b8i4onZBRm9FGDRIcTNZAte1VNwup7d2F52ZA8OBGqVBuyLL5AZBuE8XVrmwZDZD'
 c=None
-WIDTH = 'LETTER'
-HEIGHT = 'LETTER'
 
 def index(request):
 	# with open(os.path.join(BASE_DIR,'file.pdf'), 'r') as pdf:
@@ -22,33 +20,10 @@ def index(request):
 	# pdf.closed
 	# add('1', image)
 	# quick_response('1')
-	greeting()
 	return HttpResponse('ok')
 
-def greeting():
-	post_fb_url = 'https://graph.facebook.com/v2.6/me/thread_settings?access_token=%s'%(PAGE_ACCESS_TOKEN)
-	response_msg = {
-			  "setting_type":"greeting",
-			  "greeting":{
-			    "text":"Hi! Welcome to this bot."
-			  }
-			}
-	response_msg = json.dumps(response_msg)
-	status = requests.post(post_fb_url,headers={"Content-Type": "application/json"},data=response_msg)
-	logg(status.json(),'GR-1')
-
-	response_obj = {
-			  "setting_type":"call_to_actions",
-			  "thread_state":"new_thread",
-			  "call_to_actions":[
-			    {
-			      "payload":"Get Started"
-			    }
-			  ]
-			}
-	response_obj = json.dumps(response_obj)
-	status = requests.post(post_fb_url,headers={"Content-Type": "application/json"},data=response_obj)
-	logg(status.json(),'GR-2')
+def policy(request):
+	return redirect('https://www.iubenda.com/privacy-policy/7952909')
 
 def logg(text,symbol='*'):
 	return symbol*10 + text + symbol*10
@@ -199,7 +174,7 @@ class MyChatBotView(generic.View):
 						return HttpResponse()
 
 				except Exception as e:
-					logg('exception')
+					# logg('exception')
 					print e
 
 				try:
@@ -209,7 +184,7 @@ class MyChatBotView(generic.View):
 					return HttpResponse()
 
 				except Exception as e:
-					logg('exception')
+					# logg('exception')
 					print e
 
 				try:
@@ -220,7 +195,7 @@ class MyChatBotView(generic.View):
 						return HttpResponse()
 					
 				except Exception as e:
-					logg('exception')
+					# logg('exception')
 					print e
 
 		return HttpResponse()
